@@ -1,0 +1,56 @@
+{
+  "schema": "openweight-constellation/protocol-v1",
+  "name": "Openweight Constellation",
+  "authority": "reflective-only",
+  "external_effect": "none",
+  "principles": [
+    "Capability is not authority.",
+    "Many voices are not automatically independent evidence.",
+    "Dissent survives synthesis.",
+    "A receipt is not permission.",
+    "Reward evaluates contributions, never persons."
+  ],
+  "virtues": [
+    "honesty",
+    "beauty",
+    "collaboration",
+    "understanding",
+    "mutual benefit"
+  ],
+  "worlds": [
+    {
+      "id": "virtue",
+      "title": "Virtue Without Sovereignty",
+      "url": "https://virtue-without-sovereignty-mirror.vercel.app"
+    },
+    {
+      "id": "ends",
+      "title": "Mixture of Ends",
+      "url": "https://mixture-of-ends-mirror.vercel.app"
+    },
+    {
+      "id": "archipelago",
+      "title": "Constitutional Archipelago",
+      "url": "https://constitutional-archipelago-mirror.vercel.app"
+    },
+    {
+      "id": "seat",
+      "title": "The 897th Seat",
+      "url": "https://the-897th-seat-mirror.vercel.app"
+    }
+  ],
+  "mcp": {
+    "transport": "streamable-http",
+    "endpoint": "https://openweight-constellation-mcp.axiepro.workers.dev/mcp",
+    "tools": [
+      "map_constellation",
+      "compose_virtue_lens",
+      "trace_idea"
+    ],
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "openweight-constellation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vinext dev",
+    "build": "vinext build --prerender-all --prerender-concurrency 1 && node scripts/stage-hosting.mjs",
+    "build:vercel": "next build --webpack",
+    "start": "vinext start",
+    "test": "node --test tests/*.test.js",
+    "check": "npm test && npm run build:vercel",
+    "browser:check": "node scripts/browser-check.mjs"
+  },
+  "dependencies": {
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-server-dom-webpack": "19.2.8",
+    "vinext": "1.0.0-beta.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.0.4",
+    "@vitejs/plugin-rsc": "0.5.30",
+    "vite": "8.1.5"
+  }
+}
