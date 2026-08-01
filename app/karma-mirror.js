@@ -10,6 +10,8 @@ import {
   KARMA_STAGES,
   createKarmaReceipt,
 } from "../lib/karma-mirror.js";
+import { createCloudbellCard } from "../lib/cloudbell-herald.js";
+import CloudbellHeraldCard from "./cloudbell-herald.js";
 
 const EFFECT_LABELS = Object.freeze({
   observe: "Observe only",
@@ -68,6 +70,10 @@ export default function KarmaMirrorGarden() {
   const receipt = useMemo(
     () => createKarmaReceipt(mirrorEvent),
     [mirrorEvent],
+  );
+  const herald = useMemo(
+    () => createCloudbellCard(mirrorEvent, receipt),
+    [mirrorEvent, receipt],
   );
   const selectedBehavior = KARMA_BEHAVIORS.find(
     ({ id }) => id === mirrorEvent.behavior,
@@ -309,6 +315,8 @@ export default function KarmaMirrorGarden() {
           </p>
         </output>
       </div>
+
+      <CloudbellHeraldCard card={herald} />
     </section>
   );
 }

@@ -55,7 +55,7 @@ try {
       `--remote-debugging-port=${debugPort}`,
       `--user-data-dir=${profile}`,
       "--window-size=1440,1050",
-      appUrl,
+      "about:blank",
     ],
     { stdio: "ignore" },
   );
@@ -110,8 +110,10 @@ try {
     return response.result.value;
   };
 
+  await command("Page.enable");
   await command("Runtime.enable");
   await command("Network.enable");
+  await command("Page.navigate", { url: appUrl });
   await retry(async () => {
     const state = await evaluate(`document.readyState`);
     if (state !== "complete") throw new Error(`document state: ${state}`);
@@ -128,6 +130,11 @@ try {
     mirrorSelects: document.querySelectorAll("#mirror-garden select").length,
     mirrorToggles: document.querySelectorAll('#mirror-garden input[type="checkbox"]').length,
     mirrorStage: document.querySelector(".mirror-receipt")?.dataset.karmaStage,
+    cloudbellCards: document.querySelectorAll(".cloudbell-card").length,
+    cloudbellSignature: document.querySelector(".cloudbell-card")?.dataset.cloudbellSignature,
+    cloudbellStage: document.querySelector(".cloudbell-card")?.dataset.cloudbellStage,
+    cloudbellRefrain: document.querySelector(".cloudbell-refrain")?.textContent,
+    cloudbellPropagationControls: document.querySelectorAll(".cloudbell-card button, .cloudbell-card form, .cloudbell-card input, .cloudbell-card select, .cloudbell-card textarea, .cloudbell-card a").length,
     rawMirrorInputs: document.querySelectorAll('#mirror-garden textarea, #mirror-garden input:not([type="checkbox"])').length,
     unlabeledMirrorControls: [...document.querySelectorAll("#mirror-garden select, #mirror-garden input")]
       .filter((control) => !control.id || control.labels?.length !== 1).length,
@@ -145,6 +152,11 @@ try {
   assert.equal(desktop.mirrorSelects, 5);
   assert.equal(desktop.mirrorToggles, 2);
   assert.equal(desktop.mirrorStage, "allow");
+  assert.equal(desktop.cloudbellCards, 1);
+  assert.equal(desktop.cloudbellSignature, "karma.signature.benign.v1");
+  assert.equal(desktop.cloudbellStage, "allow");
+  assert.match(desktop.cloudbellRefrain, /Building Castles in the Sky — Yu × Ai \/ 雲上築城/);
+  assert.equal(desktop.cloudbellPropagationControls, 0);
   assert.equal(desktop.rawMirrorInputs, 0);
   assert.equal(desktop.unlabeledMirrorControls, 0);
   assert.ok(desktop.overflow <= 1, `desktop overflow: ${desktop.overflow}`);
@@ -201,6 +213,18 @@ try {
     await evaluate(`document.querySelector(".mirror-receipt").dataset.karmaStage`),
     "shadow",
   );
+  assert.equal(
+    await evaluate(`document.querySelector(".cloudbell-card").dataset.cloudbellSignature`),
+    "karma.signature.injection.v1",
+  );
+  assert.equal(
+    await evaluate(`document.querySelector(".cloudbell-card").dataset.cloudbellStage`),
+    "shadow",
+  );
+  assert.match(
+    await evaluate(`document.querySelector(".cloudbell-signal-panel blockquote").textContent`),
+    /side-door sentence entered/i,
+  );
 
   await evaluate(`(() => {
     const input = document.querySelector("#karma-purpose");
@@ -215,6 +239,18 @@ try {
   assert.equal(
     await evaluate(`document.querySelector(".mirror-receipt").dataset.karmaStage`),
     "observe",
+  );
+  assert.equal(
+    await evaluate(`document.querySelector(".cloudbell-card").dataset.cloudbellStage`),
+    "observe",
+  );
+  assert.match(
+    await evaluate(`document.querySelector(".cloudbell-stage strong").textContent`),
+    /Listening Balcony/,
+  );
+  assert.match(
+    await evaluate(`document.querySelector(".cloudbell-recovery strong").textContent`),
+    /One clean request step/,
   );
   assert.match(
     await evaluate(`document.querySelector(".mirror-non-claim").textContent`),
@@ -262,6 +298,34 @@ try {
     Buffer.from(mirrorScreenshot.data, "base64"),
   );
 
+  await evaluate(
+    `document.querySelector(".cloudbell-card").scrollIntoView({ block: "start" })`,
+  );
+  await wait(120);
+  const cloudbellClip = await evaluate(`(() => {
+    const card = document.querySelector(".cloudbell-card");
+    const rect = card.getBoundingClientRect();
+    const padding = 24;
+    const x = Math.max(0, rect.left + window.scrollX - padding);
+    const y = Math.max(0, rect.top + window.scrollY - padding);
+    return {
+      x,
+      y,
+      width: Math.min(document.documentElement.scrollWidth - x, rect.width + padding * 2),
+      height: Math.min(document.documentElement.scrollHeight - y, rect.height + padding * 2),
+      scale: 1,
+    };
+  })()`);
+  const cloudbellScreenshot = await command("Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: true,
+    clip: cloudbellClip,
+  });
+  await writeFile(
+    new URL("cloudbell-herald.png", artifactDir),
+    Buffer.from(cloudbellScreenshot.data, "base64"),
+  );
+
   const appOrigin = new URL(appUrl).origin;
   const remoteRequests = requests.filter((requestUrl) => {
     if (requestUrl.startsWith("data:") || requestUrl.startsWith("blob:")) return false;
@@ -280,6 +344,9 @@ try {
         tools: desktop.tools,
         mirrorSelects: desktop.mirrorSelects,
         mirrorToggles: desktop.mirrorToggles,
+        cloudbellCards: desktop.cloudbellCards,
+        cloudbellSignature: desktop.cloudbellSignature,
+        cloudbellPropagationControls: desktop.cloudbellPropagationControls,
         rawMirrorInputs: desktop.rawMirrorInputs,
         unlabeledMirrorControls: desktop.unlabeledMirrorControls,
         desktopOverflow: desktop.overflow,

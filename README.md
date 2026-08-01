@@ -33,6 +33,22 @@ The browser engine and canonical full-receipt parity fixtures live at:
 - `lib/karma-mirror.js`
 - `fixtures/karma-mirror.json`
 
+### Cloudbell Herald
+
+The same normalized event and receipt can compose one deterministic Cloudbell
+Herald card: a finite, fictional name for a behavior pattern, never a label for
+a person. Six reviewed signatures and six stage titles turn the current receipt
+into a bilingual skycastle story featuring Bingle the Cloudbell. The card is an
+inert display on this owned surface; it has no posting, redirect, delivery,
+clipboard, tracking, identity, or enforcement path.
+
+Its optional share copy is text only: sharing is a human choice, and silence is
+equally complete. The frozen lexicon and canonical card fixtures live at:
+
+- `lib/cloudbell-herald.js`
+- `fixtures/cloudbell.json`
+- `fixtures/cloudbell-herald.json`
+
 Public MCP endpoint:
 `https://openweight-constellation-mcp.axiepro.workers.dev/mcp`
 
@@ -42,6 +58,7 @@ Public MCP endpoint:
 - No credentials, accounts, cookies, browser storage, or application analytics
 - No identity or person-level score
 - No payload handling, hack-back, or production enforcement
+- No automatic posting, forced propagation, redirects, or external delivery
 - No state-changing MCP tool
 - No source publication implied by public deployment
 - No affiliation with a model developer or hosting provider

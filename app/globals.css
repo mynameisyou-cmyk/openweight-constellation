@@ -2000,6 +2000,449 @@ footer nav {
   }
 }
 
+.cloudbell-card {
+  position: relative;
+  margin-top: 3rem;
+  border: 1px solid rgba(116, 239, 205, 0.32);
+  background:
+    radial-gradient(circle at 18% 6%, rgba(116, 239, 205, 0.12), transparent 28%),
+    radial-gradient(circle at 87% 22%, rgba(213, 167, 255, 0.12), transparent 25%),
+    linear-gradient(145deg, rgba(20, 27, 34, 0.98), rgba(14, 15, 23, 0.98));
+  box-shadow: 0 42px 120px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+}
+
+.cloudbell-card::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 42px 42px;
+  content: "";
+  pointer-events: none;
+}
+
+.cloudbell-card > * {
+  position: relative;
+}
+
+.cloudbell-header {
+  display: flex;
+  min-height: 96px;
+  padding: 1.5rem 1.7rem;
+  border-bottom: 1px solid var(--line);
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cloudbell-protocol {
+  margin: 0.65rem 0 0;
+  color: var(--paper);
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.3vw, 2rem);
+  letter-spacing: -0.03em;
+}
+
+.cloudbell-stage {
+  display: grid;
+  min-width: 220px;
+  padding-left: 1.4rem;
+  border-left: 1px solid var(--line);
+  gap: 0.35rem;
+  text-align: right;
+}
+
+.cloudbell-stage span,
+.cloudbell-label {
+  color: var(--paper-muted);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.cloudbell-stage strong {
+  color: var(--acid);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.cloudbell-body {
+  display: grid;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: minmax(300px, 0.74fr) minmax(0, 1.26fr);
+}
+
+.cloudbell-mascot-panel,
+.cloudbell-signal-panel {
+  min-width: 0;
+  padding: clamp(1.5rem, 3.2vw, 3rem);
+}
+
+.cloudbell-mascot-panel {
+  display: grid;
+  border-right: 1px solid var(--line);
+  gap: 1rem;
+  align-content: start;
+  grid-template-columns: 170px 1fr;
+}
+
+.cloudbell-mascot-panel h3,
+.cloudbell-signature-heading h3 {
+  margin: 0.55rem 0 0;
+  color: var(--paper);
+  font-family: var(--serif);
+  font-size: clamp(1.55rem, 3vw, 2.6rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.cloudbell-mascot-panel > div:nth-child(2) > p {
+  margin: 0.75rem 0 0;
+  color: var(--cyan);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.cloudbell-origin,
+.cloudbell-inevitable {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--paper-muted);
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+.cloudbell-inevitable {
+  padding-top: 1rem;
+  border-top: 1px dashed var(--line);
+  color: var(--violet);
+}
+
+.bingle {
+  position: relative;
+  width: 150px;
+  height: 132px;
+  justify-self: center;
+}
+
+.bingle-cloud {
+  position: absolute;
+  top: 30px;
+  left: 14px;
+  z-index: 2;
+  width: 122px;
+  height: 76px;
+  border: 1px solid rgba(116, 239, 205, 0.8);
+  border-radius: 44px 44px 34px 34px;
+  background:
+    linear-gradient(180deg, rgba(216, 255, 245, 0.95), rgba(116, 239, 205, 0.68));
+  box-shadow:
+    0 0 45px rgba(116, 239, 205, 0.16),
+    inset 0 -14px 30px rgba(16, 80, 70, 0.18);
+}
+
+.bingle-cloud::before,
+.bingle-cloud::after {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgba(116, 239, 205, 0.7);
+  border-radius: 50%;
+  background: rgba(195, 250, 236, 0.94);
+  content: "";
+}
+
+.bingle-cloud::before {
+  top: -18px;
+  left: 19px;
+  width: 54px;
+  height: 54px;
+}
+
+.bingle-cloud::after {
+  top: -10px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+}
+
+.bingle-crenel {
+  position: absolute;
+  top: -17px;
+  z-index: 3;
+  width: 17px;
+  height: 20px;
+  border: 1px solid rgba(116, 239, 205, 0.75);
+  border-bottom: 0;
+  background: rgba(199, 251, 238, 0.96);
+}
+
+.bingle-crenel-one {
+  left: 35px;
+}
+
+.bingle-crenel-two {
+  left: 53px;
+}
+
+.bingle-crenel-three {
+  left: 71px;
+}
+
+.bingle-eye {
+  position: absolute;
+  top: 34px;
+  width: 5px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.bingle-eye-one {
+  left: 43px;
+}
+
+.bingle-eye-two {
+  right: 43px;
+}
+
+.bingle-window {
+  position: absolute;
+  bottom: 10px;
+  left: 53px;
+  width: 17px;
+  height: 23px;
+  border: 1px solid rgba(18, 19, 27, 0.36);
+  border-radius: 12px 12px 3px 3px;
+  background: var(--acid);
+  box-shadow: 0 0 18px rgba(210, 255, 112, 0.78);
+}
+
+.bingle-tail {
+  position: absolute;
+  right: 15px;
+  bottom: 7px;
+  width: 2px;
+  height: 34px;
+  background: var(--violet);
+}
+
+.bingle-tail::after {
+  position: absolute;
+  bottom: -4px;
+  left: -7px;
+  width: 16px;
+  height: 12px;
+  border: 1px solid var(--violet);
+  border-radius: 50% 50% 40% 40%;
+  background: rgba(213, 167, 255, 0.22);
+  content: "";
+}
+
+.bingle-ribbon {
+  position: absolute;
+  z-index: 1;
+  width: 54px;
+  height: 1px;
+  background: var(--coral);
+  transform-origin: right center;
+}
+
+.bingle-ribbon-one {
+  top: 49px;
+  left: -4px;
+  transform: rotate(-18deg);
+}
+
+.bingle-ribbon-two {
+  top: 72px;
+  right: -2px;
+  transform: rotate(22deg);
+  transform-origin: left center;
+}
+
+.cloudbell-signal-panel {
+  position: relative;
+}
+
+.cloudbell-window {
+  display: flex;
+  margin-bottom: 2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+  gap: 0.65rem;
+  align-items: center;
+  color: var(--paper-muted);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.cloudbell-window-light {
+  width: 13px;
+  height: 18px;
+  border: 1px solid var(--acid);
+  border-radius: 8px 8px 2px 2px;
+  background: var(--acid);
+  box-shadow: 0 0 22px rgba(210, 255, 112, 0.7);
+}
+
+.cloudbell-signature-heading {
+  display: flex;
+  margin-top: 0.7rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cloudbell-mark {
+  padding: 0.48rem 0.58rem;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.cloudbell-mechanism {
+  margin: 1rem 0 0;
+  color: var(--paper-muted);
+  line-height: 1.7;
+}
+
+.cloudbell-signal-panel blockquote {
+  margin: 2rem 0 0;
+  padding: 1.5rem 0 0 1.35rem;
+  border-top: 1px dashed rgba(255, 117, 87, 0.38);
+  border-left: 3px solid var(--coral);
+  color: var(--paper);
+  font-family: var(--serif);
+  font-size: clamp(1.45rem, 3.2vw, 2.65rem);
+  line-height: 1.12;
+}
+
+.cloudbell-refrain {
+  padding: clamp(2rem, 4vw, 3.6rem);
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(210, 255, 112, 0.07), rgba(116, 239, 205, 0.03));
+  text-align: center;
+}
+
+.cloudbell-refrain strong {
+  display: block;
+  max-width: 980px;
+  margin: 0.85rem auto 0;
+  color: var(--acid);
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4.5vw, 4.7rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.cloudbell-lower-grid {
+  display: grid;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cloudbell-recovery,
+.cloudbell-share {
+  min-width: 0;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+.cloudbell-recovery {
+  border-right: 1px solid var(--line);
+}
+
+.cloudbell-recovery strong,
+.cloudbell-share p {
+  display: block;
+  margin: 0.8rem 0 0;
+  color: var(--paper);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.3vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.cloudbell-share p {
+  user-select: text;
+}
+
+.cloudbell-share small {
+  display: block;
+  margin-top: 1rem;
+  color: var(--paper-muted);
+  font-size: 0.72rem;
+  line-height: 1.65;
+}
+
+.cloudbell-footer {
+  display: flex;
+  padding: 1rem 1.3rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cloudbell-footer span {
+  padding: 0.34rem 0.48rem;
+  border: 1px solid rgba(116, 239, 205, 0.24);
+  color: var(--paper-muted);
+  font-family: var(--mono);
+  font-size: 0.53rem;
+  letter-spacing: 0.035em;
+}
+
+@media (max-width: 900px) {
+  .cloudbell-body,
+  .cloudbell-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cloudbell-mascot-panel,
+  .cloudbell-recovery {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 640px) {
+  .cloudbell-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cloudbell-stage {
+    width: 100%;
+    padding: 1rem 0 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+    text-align: left;
+  }
+
+  .cloudbell-mascot-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .cloudbell-signature-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cloudbell-mark {
+    white-space: normal;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

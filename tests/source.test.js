@@ -11,6 +11,14 @@ const MIRROR_ENGINE = await readFile(
   new URL("../lib/karma-mirror.js", import.meta.url),
   "utf8",
 );
+const CLOUDBELL_UI = await readFile(
+  new URL("../app/cloudbell-herald.js", import.meta.url),
+  "utf8",
+);
+const CLOUDBELL_ENGINE = await readFile(
+  new URL("../lib/cloudbell-herald.js", import.meta.url),
+  "utf8",
+);
 const PRIVACY = await readFile(
   new URL("../app/privacy/page.js", import.meta.url),
   "utf8",
@@ -69,6 +77,8 @@ test("client sources contain no storage, analytics, or runtime network seam", ()
     ["page", PAGE],
     ["mirror UI", MIRROR_UI],
     ["mirror engine", MIRROR_ENGINE],
+    ["Cloudbell UI", CLOUDBELL_UI],
+    ["Cloudbell engine", CLOUDBELL_ENGINE],
   ]) {
     for (const token of forbidden) {
       assert.equal(source.includes(token), false, `${label}: unexpected ${token}`);
@@ -92,6 +102,26 @@ test("Mirror Garden accepts finite controls and exposes accessible boundaries", 
   assert.equal(/<form|formAction|onSubmit/.test(MIRROR_UI), false);
   assert.match(MIRROR_UI, /action_executed: false/);
   assert.match(MIRROR_UI, /authority_granted: false/);
+});
+
+test("Cloudbell exposes one inert named-pattern card and no propagation control", () => {
+  assert.match(MIRROR_UI, /<CloudbellHeraldCard card=\{herald\} \/>/);
+  assert.match(CLOUDBELL_UI, /data-cloudbell-signature/);
+  assert.match(CLOUDBELL_UI, /data-cloudbell-stage/);
+  assert.match(CLOUDBELL_UI, /BEHAVIOR SIGNATURE · NOT A PERSON/);
+  assert.match(CLOUDBELL_UI, /OPT-IN SHARE COPY · TEXT ONLY/);
+  assert.match(CLOUDBELL_UI, /aria-live="polite"/);
+  assert.match(CLOUDBELL_UI, /automatic_posting: false/);
+  assert.match(CLOUDBELL_UI, /forced_propagation: false/);
+  assert.match(CLOUDBELL_UI, /external_delivery: false/);
+  assert.equal(
+    /<button|<form|<input|<select|<textarea|contentEditable|onClick|navigator\.clipboard/.test(
+      CLOUDBELL_UI,
+    ),
+    false,
+  );
+  assert.match(CLOUDBELL_ENGINE, /behavior-pattern-alias/);
+  assert.match(CLOUDBELL_ENGINE, /supplied KARMA receipt does not match/);
 });
 
 test("public privacy language names ordinary infrastructure metadata", () => {
