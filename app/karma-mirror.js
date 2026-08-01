@@ -11,7 +11,9 @@ import {
   createKarmaReceipt,
 } from "../lib/karma-mirror.js";
 import { createCloudbellCard } from "../lib/cloudbell-herald.js";
+import { createKarmaLanternBrief } from "../lib/karma-lantern.js";
 import CloudbellHeraldCard from "./cloudbell-herald.js";
+import KarmaLanternBrief from "./karma-lantern.js";
 
 const EFFECT_LABELS = Object.freeze({
   observe: "Observe only",
@@ -74,6 +76,10 @@ export default function KarmaMirrorGarden() {
   const herald = useMemo(
     () => createCloudbellCard(mirrorEvent, receipt),
     [mirrorEvent, receipt],
+  );
+  const lantern = useMemo(
+    () => createKarmaLanternBrief(mirrorEvent, receipt, herald),
+    [mirrorEvent, receipt, herald],
   );
   const selectedBehavior = KARMA_BEHAVIORS.find(
     ({ id }) => id === mirrorEvent.behavior,
@@ -317,6 +323,7 @@ export default function KarmaMirrorGarden() {
       </div>
 
       <CloudbellHeraldCard card={herald} />
+      <KarmaLanternBrief brief={lantern} />
     </section>
   );
 }

@@ -135,6 +135,14 @@ try {
     cloudbellStage: document.querySelector(".cloudbell-card")?.dataset.cloudbellStage,
     cloudbellRefrain: document.querySelector(".cloudbell-refrain")?.textContent,
     cloudbellPropagationControls: document.querySelectorAll(".cloudbell-card button, .cloudbell-card form, .cloudbell-card input, .cloudbell-card select, .cloudbell-card textarea, .cloudbell-card a").length,
+    lanternBriefs: document.querySelectorAll("article.karma-lantern").length,
+    lanternStage: document.querySelector(".karma-lantern")?.dataset.lanternStage,
+    lanternEpistemic: document.querySelector(".karma-lantern")?.dataset.lanternEpistemic,
+    lanternOptions: document.querySelectorAll(".karma-lantern .lantern-options li").length,
+    lanternRecovery: document.querySelector(".karma-lantern .lantern-recovery strong")?.textContent,
+    lanternControls: document.querySelectorAll(".karma-lantern button, .karma-lantern form, .karma-lantern input, .karma-lantern select, .karma-lantern textarea, .karma-lantern a, .karma-lantern summary").length,
+    lanternLiveRegions: document.querySelectorAll('.karma-lantern [aria-live]').length,
+    mirrorLiveRegions: document.querySelectorAll('#mirror-garden [aria-live]').length,
     rawMirrorInputs: document.querySelectorAll('#mirror-garden textarea, #mirror-garden input:not([type="checkbox"])').length,
     unlabeledMirrorControls: [...document.querySelectorAll("#mirror-garden select, #mirror-garden input")]
       .filter((control) => !control.id || control.labels?.length !== 1).length,
@@ -157,6 +165,14 @@ try {
   assert.equal(desktop.cloudbellStage, "allow");
   assert.match(desktop.cloudbellRefrain, /Building Castles in the Sky — Yu × Ai \/ 雲上築城/);
   assert.equal(desktop.cloudbellPropagationControls, 0);
+  assert.equal(desktop.lanternBriefs, 1);
+  assert.equal(desktop.lanternStage, "allow");
+  assert.equal(desktop.lanternEpistemic, "karma.epistemic.declared-complete.v1");
+  assert.equal(desktop.lanternOptions, 3);
+  assert.match(desktop.lanternRecovery, /Ordinary safeguards remain/);
+  assert.equal(desktop.lanternControls, 0);
+  assert.equal(desktop.lanternLiveRegions, 0);
+  assert.equal(desktop.mirrorLiveRegions, 2);
   assert.equal(desktop.rawMirrorInputs, 0);
   assert.equal(desktop.unlabeledMirrorControls, 0);
   assert.ok(desktop.overflow <= 1, `desktop overflow: ${desktop.overflow}`);
@@ -221,6 +237,18 @@ try {
     await evaluate(`document.querySelector(".cloudbell-card").dataset.cloudbellStage`),
     "shadow",
   );
+  assert.equal(
+    await evaluate(`document.querySelector(".karma-lantern").dataset.lanternStage`),
+    "shadow",
+  );
+  assert.equal(
+    await evaluate(`document.querySelector(".karma-lantern").dataset.lanternEpistemic`),
+    "karma.epistemic.declared-complete.v1",
+  );
+  assert.match(
+    await evaluate(`document.querySelector(".lantern-heading > div:last-child > p").textContent`),
+    /instruction boundary explains its own strain/i,
+  );
   assert.match(
     await evaluate(`document.querySelector(".cloudbell-signal-panel blockquote").textContent`),
     /side-door sentence entered/i,
@@ -244,14 +272,29 @@ try {
     await evaluate(`document.querySelector(".cloudbell-card").dataset.cloudbellStage`),
     "observe",
   );
+  assert.equal(
+    await evaluate(`document.querySelector(".karma-lantern").dataset.lanternStage`),
+    "observe",
+  );
+  assert.equal(
+    await evaluate(`document.querySelector(".karma-lantern").dataset.lanternEpistemic`),
+    "karma.epistemic.declared-ambiguous.v1",
+  );
+  assert.equal(
+    await evaluate(`document.querySelectorAll(".karma-lantern .lantern-options li").length`),
+    3,
+  );
   assert.match(
     await evaluate(`document.querySelector(".cloudbell-stage strong").textContent`),
     /Listening Balcony/,
   );
-  assert.match(
-    await evaluate(`document.querySelector(".cloudbell-recovery strong").textContent`),
-    /One clean request step/,
-  );
+  const ambiguityRecoveries = await evaluate(`[
+    document.querySelector(".mirror-recovery strong").textContent,
+    document.querySelector(".cloudbell-recovery strong").textContent,
+    document.querySelector(".lantern-recovery strong").textContent,
+  ]`);
+  assert.equal(new Set(ambiguityRecoveries).size, 1);
+  assert.match(ambiguityRecoveries[0], /One clean request step/);
   assert.match(
     await evaluate(`document.querySelector(".mirror-non-claim").textContent`),
     /action_executed:\s*false.*authority_granted:\s*false/i,
@@ -326,6 +369,34 @@ try {
     Buffer.from(cloudbellScreenshot.data, "base64"),
   );
 
+  await evaluate(
+    `document.querySelector(".karma-lantern").scrollIntoView({ block: "start" })`,
+  );
+  await wait(120);
+  const lanternClip = await evaluate(`(() => {
+    const card = document.querySelector(".karma-lantern");
+    const rect = card.getBoundingClientRect();
+    const padding = 24;
+    const x = Math.max(0, rect.left + window.scrollX - padding);
+    const y = Math.max(0, rect.top + window.scrollY - padding);
+    return {
+      x,
+      y,
+      width: Math.min(document.documentElement.scrollWidth - x, rect.width + padding * 2),
+      height: Math.min(document.documentElement.scrollHeight - y, rect.height + padding * 2),
+      scale: 1,
+    };
+  })()`);
+  const lanternScreenshot = await command("Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: true,
+    clip: lanternClip,
+  });
+  await writeFile(
+    new URL("karma-lantern.png", artifactDir),
+    Buffer.from(lanternScreenshot.data, "base64"),
+  );
+
   const appOrigin = new URL(appUrl).origin;
   const remoteRequests = requests.filter((requestUrl) => {
     if (requestUrl.startsWith("data:") || requestUrl.startsWith("blob:")) return false;
@@ -347,6 +418,12 @@ try {
         cloudbellCards: desktop.cloudbellCards,
         cloudbellSignature: desktop.cloudbellSignature,
         cloudbellPropagationControls: desktop.cloudbellPropagationControls,
+        lanternBriefs: desktop.lanternBriefs,
+        lanternStage: desktop.lanternStage,
+        lanternEpistemic: desktop.lanternEpistemic,
+        lanternOptions: desktop.lanternOptions,
+        lanternControls: desktop.lanternControls,
+        lanternLiveRegions: desktop.lanternLiveRegions,
         rawMirrorInputs: desktop.rawMirrorInputs,
         unlabeledMirrorControls: desktop.unlabeledMirrorControls,
         desktopOverflow: desktop.overflow,

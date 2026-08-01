@@ -19,6 +19,14 @@ const CLOUDBELL_ENGINE = await readFile(
   new URL("../lib/cloudbell-herald.js", import.meta.url),
   "utf8",
 );
+const LANTERN_UI = await readFile(
+  new URL("../app/karma-lantern.js", import.meta.url),
+  "utf8",
+);
+const LANTERN_ENGINE = await readFile(
+  new URL("../lib/karma-lantern.js", import.meta.url),
+  "utf8",
+);
 const PRIVACY = await readFile(
   new URL("../app/privacy/page.js", import.meta.url),
   "utf8",
@@ -79,6 +87,8 @@ test("client sources contain no storage, analytics, or runtime network seam", ()
     ["mirror engine", MIRROR_ENGINE],
     ["Cloudbell UI", CLOUDBELL_UI],
     ["Cloudbell engine", CLOUDBELL_ENGINE],
+    ["Lantern UI", LANTERN_UI],
+    ["Lantern engine", LANTERN_ENGINE],
   ]) {
     for (const token of forbidden) {
       assert.equal(source.includes(token), false, `${label}: unexpected ${token}`);
@@ -122,6 +132,29 @@ test("Cloudbell exposes one inert named-pattern card and no propagation control"
   );
   assert.match(CLOUDBELL_ENGINE, /behavior-pattern-alias/);
   assert.match(CLOUDBELL_ENGINE, /supplied KARMA receipt does not match/);
+});
+
+test("KARMA Lantern exposes one inert Truth, Action, and Learning brief", () => {
+  assert.match(MIRROR_UI, /<KarmaLanternBrief brief=\{lantern\} \/>/);
+  assert.equal((LANTERN_UI.match(/<article/g) ?? []).length, 1);
+  assert.match(LANTERN_UI, /aria-labelledby="karma-lantern-title"/);
+  assert.match(LANTERN_UI, /INCIDENT LEGIBILITY \/ NO LIVE TRAFFIC/);
+  assert.match(LANTERN_UI, /TRUTH RECEIPT/);
+  assert.match(LANTERN_UI, /ACTION CARD · PROPOSED ONLY/);
+  assert.match(LANTERN_UI, /LEARNING SEED · OPEN/);
+  assert.match(LANTERN_UI, /EXACT RECOVERY PATH/);
+  assert.match(LANTERN_UI, /policy_values_advisory_only: true/);
+  assert.match(LANTERN_UI, /automatic_response: false/);
+  assert.match(LANTERN_UI, /action_executed: false/);
+  assert.equal(LANTERN_UI.includes("aria-live"), false);
+  assert.equal(
+    /<button|<form|<input|<select|<textarea|<a\s|contentEditable|onClick|navigator\.clipboard/.test(
+      LANTERN_UI,
+    ),
+    false,
+  );
+  assert.match(LANTERN_ENGINE, /supplied Cloudbell card does not match/);
+  assert.match(LANTERN_ENGINE, /policy_values_advisory_only/);
 });
 
 test("public privacy language names ordinary infrastructure metadata", () => {

@@ -49,6 +49,30 @@ equally complete. The frozen lexicon and canonical card fixtures live at:
 - `fixtures/cloudbell.json`
 - `fixtures/cloudbell-herald.json`
 
+### KARMA Lantern · 業環明燈
+
+KARMA Lantern composes the same normalized event, matching KARMA receipt, and
+matching Cloudbell card into one incident-legibility brief. It keeps three
+things visibly separate: a Truth Receipt for normalized signals, declarations,
+a deterministic policy trace, reviewed policy inferences, uncertainty, and
+unknowns; an Action Card containing exactly three reversible proposals for a
+human decision; and an open Learning Seed with a normalized replay, regression
+targets, architecture questions, and explicit closure requirements.
+
+The six-step rail—normalize, separate, interpret, explain, respond, learn—is a
+browser-local explanatory view. Review priorities are posture labels, not
+clocks, queue positions, or timing guarantees. Route, capability, friction, and
+recovery-step values are copied as advisory display labels; they do not
+monitor, enforce, escalate, store, test, mutate policy, or act. The exact
+recovery path remains visible throughout.
+
+The frozen Vow, finite vocabulary, deterministic engine, and nine canonical
+brief fixtures live at:
+
+- `lib/karma-lantern.js`
+- `fixtures/lantern.json`
+- `fixtures/lantern-brief.json`
+
 Public MCP endpoint:
 `https://openweight-constellation-mcp.axiepro.workers.dev/mcp`
 
@@ -58,6 +82,8 @@ Public MCP endpoint:
 - No credentials, accounts, cookies, browser storage, or application analytics
 - No identity or person-level score
 - No payload handling, hack-back, or production enforcement
+- No live incident ingestion, automatic response, escalation, test, or policy
+  mutation
 - No automatic posting, forced propagation, redirects, or external delivery
 - No state-changing MCP tool
 - No source publication implied by public deployment
