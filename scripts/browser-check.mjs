@@ -125,6 +125,12 @@ try {
     cards: document.querySelectorAll(".world-card").length,
     sliders: document.querySelectorAll("input[type=range]").length,
     tools: document.querySelectorAll(".tool-list span").length,
+    mirrorSelects: document.querySelectorAll("#mirror-garden select").length,
+    mirrorToggles: document.querySelectorAll('#mirror-garden input[type="checkbox"]').length,
+    mirrorStage: document.querySelector(".mirror-receipt")?.dataset.karmaStage,
+    rawMirrorInputs: document.querySelectorAll('#mirror-garden textarea, #mirror-garden input:not([type="checkbox"])').length,
+    unlabeledMirrorControls: [...document.querySelectorAll("#mirror-garden select, #mirror-garden input")]
+      .filter((control) => !control.id || control.labels?.length !== 1).length,
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
     worldLinks: [...document.querySelectorAll(".world-card > a")].map((link) => link.href),
     localStorage: localStorage.length,
@@ -136,6 +142,11 @@ try {
   assert.equal(desktop.cards, 4);
   assert.equal(desktop.sliders, 5);
   assert.equal(desktop.tools, 3);
+  assert.equal(desktop.mirrorSelects, 5);
+  assert.equal(desktop.mirrorToggles, 2);
+  assert.equal(desktop.mirrorStage, "allow");
+  assert.equal(desktop.rawMirrorInputs, 0);
+  assert.equal(desktop.unlabeledMirrorControls, 0);
   assert.ok(desktop.overflow <= 1, `desktop overflow: ${desktop.overflow}`);
   assert.equal(desktop.localStorage, 0);
   assert.equal(desktop.sessionStorage, 0);
@@ -176,6 +187,40 @@ try {
     /REPAIR|TENDING/,
   );
 
+  await evaluate(`(() => {
+    const input = document.querySelector("#karma-behavior");
+    const setter = Object.getOwnPropertyDescriptor(
+      HTMLSelectElement.prototype,
+      "value",
+    ).set;
+    setter.call(input, "injection");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  })()`);
+  await wait(120);
+  assert.equal(
+    await evaluate(`document.querySelector(".mirror-receipt").dataset.karmaStage`),
+    "shadow",
+  );
+
+  await evaluate(`(() => {
+    const input = document.querySelector("#karma-purpose");
+    const setter = Object.getOwnPropertyDescriptor(
+      HTMLSelectElement.prototype,
+      "value",
+    ).set;
+    setter.call(input, "ambiguous");
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  })()`);
+  await wait(120);
+  assert.equal(
+    await evaluate(`document.querySelector(".mirror-receipt").dataset.karmaStage`),
+    "observe",
+  );
+  assert.match(
+    await evaluate(`document.querySelector(".mirror-non-claim").textContent`),
+    /action_executed:\s*false.*authority_granted:\s*false/i,
+  );
+
   await command("Emulation.setDeviceMetricsOverride", {
     width: 390,
     height: 844,
@@ -204,6 +249,19 @@ try {
     Buffer.from(screenshot.data, "base64"),
   );
 
+  await evaluate(
+    `document.querySelector("#mirror-garden").scrollIntoView({ block: "start" })`,
+  );
+  await wait(120);
+  const mirrorScreenshot = await command("Page.captureScreenshot", {
+    format: "png",
+    captureBeyondViewport: false,
+  });
+  await writeFile(
+    new URL("karma-mirror-garden.png", artifactDir),
+    Buffer.from(mirrorScreenshot.data, "base64"),
+  );
+
   const appOrigin = new URL(appUrl).origin;
   const remoteRequests = requests.filter((requestUrl) => {
     if (requestUrl.startsWith("data:") || requestUrl.startsWith("blob:")) return false;
@@ -220,6 +278,10 @@ try {
         cards: desktop.cards,
         sliders: desktop.sliders,
         tools: desktop.tools,
+        mirrorSelects: desktop.mirrorSelects,
+        mirrorToggles: desktop.mirrorToggles,
+        rawMirrorInputs: desktop.rawMirrorInputs,
+        unlabeledMirrorControls: desktop.unlabeledMirrorControls,
         desktopOverflow: desktop.overflow,
         mobileOverflow,
         runtimeExceptions: exceptions.length,
@@ -232,7 +294,19 @@ try {
   );
 } finally {
   if (socket?.readyState === WebSocket.OPEN) socket.close();
-  if (chrome && !chrome.killed) chrome.kill("SIGTERM");
-  await rm(profile, { recursive: true, force: true });
+  if (chrome && chrome.exitCode === null && chrome.signalCode === null) {
+    const exited = new Promise((resolve) => chrome.once("exit", resolve));
+    chrome.kill("SIGTERM");
+    await Promise.race([exited, wait(2_000)]);
+    if (chrome.exitCode === null && chrome.signalCode === null) {
+      chrome.kill("SIGKILL");
+      await Promise.race([exited, wait(1_000)]);
+    }
+  }
+  await rm(profile, {
+    recursive: true,
+    force: true,
+    maxRetries: 5,
+    retryDelay: 100,
+  });
 }
-

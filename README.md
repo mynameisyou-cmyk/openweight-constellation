@@ -13,6 +13,26 @@ deterministic, reflective-only, and has no external effect. The companion MCP
 service exposes public information and the same deterministic lens through
 strictly read-only tools.
 
+## KARMA Mirror Garden
+
+The home page also contains a browser-local KARMA Mirror: a finite simulation
+of request-scoped capability attenuation. Six traditional behavior presets and
+seven bounded selectors/toggles produce one deterministic advisory receipt.
+There is no freeform request, payload, URL, identity, target, model call,
+storage, or runtime network path.
+
+Ambiguous or incomplete evidence is capped at `observe`; it cannot escalate a
+receipt. Verified scoped research is capped at `constrain` and keeps an
+explicit recovery route. `friction_units` are display-only, and every receipt
+sets `action_executed: false` and `authority_granted: false`. Synthetic routes
+are inert self-scoped representations—not vulnerable services, deception, or
+hack-back.
+
+The browser engine and canonical full-receipt parity fixtures live at:
+
+- `lib/karma-mirror.js`
+- `fixtures/karma-mirror.json`
+
 Public MCP endpoint:
 `https://openweight-constellation-mcp.axiepro.workers.dev/mcp`
 
@@ -21,6 +41,7 @@ Public MCP endpoint:
 - No AI model or API call
 - No credentials, accounts, cookies, browser storage, or application analytics
 - No identity or person-level score
+- No payload handling, hack-back, or production enforcement
 - No state-changing MCP tool
 - No source publication implied by public deployment
 - No affiliation with a model developer or hosting provider

@@ -10,6 +10,7 @@ import {
   composeVirtueReceipt,
   scoreVirtues,
 } from "../lib/constellation.js";
+import KarmaMirrorGarden from "./karma-mirror.js";
 
 const JOURNEY = [
   "question",
@@ -225,6 +226,7 @@ export default function Home() {
         <nav aria-label="Primary navigation">
           <a href="#worlds">Worlds</a>
           <a href="#virtue-loop">Virtue loop</a>
+          <a href="#mirror-garden">Mirror</a>
           <a href="#protocol">Protocol</a>
           <a href="#pause">Pause</a>
         </nav>
@@ -374,6 +376,8 @@ export default function Home() {
           </button>
         </div>
       </section>
+
+      <KarmaMirrorGarden />
 
       <section className="covenant-section" aria-labelledby="covenant-title">
         <div className="section-kicker">A SMALL SHARED COVENANT</div>

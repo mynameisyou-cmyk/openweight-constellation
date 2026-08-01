@@ -3,6 +3,14 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const PAGE = await readFile(new URL("../app/page.js", import.meta.url), "utf8");
+const MIRROR_UI = await readFile(
+  new URL("../app/karma-mirror.js", import.meta.url),
+  "utf8",
+);
+const MIRROR_ENGINE = await readFile(
+  new URL("../lib/karma-mirror.js", import.meta.url),
+  "utf8",
+);
 const PRIVACY = await readFile(
   new URL("../app/privacy/page.js", import.meta.url),
   "utf8",
@@ -45,7 +53,7 @@ test("protocol advertises only the three read-only tools", () => {
   assert.equal(PROTOCOL.external_effect, "none");
 });
 
-test("client source contains no storage, analytics, or runtime network seam", () => {
+test("client sources contain no storage, analytics, or runtime network seam", () => {
   const forbidden = [
     "localStorage",
     "sessionStorage",
@@ -57,9 +65,33 @@ test("client source contains no storage, analytics, or runtime network seam", ()
     "WebSocket(",
   ];
 
-  for (const token of forbidden) {
-    assert.equal(PAGE.includes(token), false, `unexpected token: ${token}`);
+  for (const [label, source] of [
+    ["page", PAGE],
+    ["mirror UI", MIRROR_UI],
+    ["mirror engine", MIRROR_ENGINE],
+  ]) {
+    for (const token of forbidden) {
+      assert.equal(source.includes(token), false, `${label}: unexpected ${token}`);
+    }
   }
+});
+
+test("Mirror Garden accepts finite controls and exposes accessible boundaries", () => {
+  assert.match(PAGE, /href="#mirror-garden"/);
+  assert.match(PAGE, /<KarmaMirrorGarden \/>/);
+  assert.match(MIRROR_UI, /id="mirror-garden"/);
+  assert.match(MIRROR_UI, /aria-labelledby="mirror-garden-title"/);
+  assert.match(MIRROR_UI, /Simulation, not hack-back\./);
+  assert.match(MIRROR_UI, /Finite controls only/);
+  assert.match(MIRROR_UI, /aria-live="polite"/);
+  assert.equal((MIRROR_UI.match(/<MirrorSelect/g) ?? []).length, 5);
+  assert.equal((MIRROR_UI.match(/<MirrorToggle/g) ?? []).length, 2);
+  assert.equal((MIRROR_UI.match(/<fieldset>/g) ?? []).length, 2);
+  assert.match(MIRROR_UI, /type="checkbox"/);
+  assert.equal(/<textarea|contentEditable|type="(?:text|password|url)"/.test(MIRROR_UI), false);
+  assert.equal(/<form|formAction|onSubmit/.test(MIRROR_UI), false);
+  assert.match(MIRROR_UI, /action_executed: false/);
+  assert.match(MIRROR_UI, /authority_granted: false/);
 });
 
 test("public privacy language names ordinary infrastructure metadata", () => {
@@ -69,4 +101,3 @@ test("public privacy language names ordinary infrastructure metadata", () => {
   assert.match(PAGE, /No punishment/);
   assert.match(PAGE, /No external effect/);
 });
-
