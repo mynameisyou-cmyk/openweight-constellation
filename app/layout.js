@@ -7,6 +7,7 @@ export const metadata = {
   },
   description:
     "Four speculative civic worlds for plural open-weight intelligence, joined by a reflective virtue instrument and a read-only protocol.",
+  authors: [{ name: "Yu & Ai", url: "https://ai-love.cc" }],
 };
 
 export const viewport = {
