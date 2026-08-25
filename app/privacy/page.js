@@ -48,6 +48,12 @@ export default function PrivacyPage() {
         Links to the four public mirror sites open separate deployments. Their
         infrastructure boundaries apply once you follow those links.
       </p>
+      <p>
+        One small music pill near the foot of each page is an embedded frame
+        served from Hugging Face Spaces (開心會 chill-fi). Loading it is an
+        ordinary request to that host with no referrer sent; it never plays
+        until you press play, and this site reads nothing back from it.
+      </p>
 
       <h2>Contact and changes</h2>
       <p>

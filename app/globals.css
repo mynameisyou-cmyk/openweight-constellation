@@ -3062,3 +3062,32 @@ footer nav {
     transition-duration: 0.001ms !important;
   }
 }
+
+.chillfi-door {
+  display: flex;
+  width: min(1500px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 0 0 3rem;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.chillfi-door iframe {
+  max-width: 100%;
+  border: 0;
+  border-radius: 999px;
+}
+
+.chillfi-door small {
+  color: var(--paper-muted);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 820px) {
+  .chillfi-door {
+    width: min(100% - 2rem, 1500px);
+  }
+}
