@@ -17,10 +17,26 @@ export const viewport = {
   colorScheme: "dark",
 };
 
+const CHILLFI_SITE = "openweight";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <aside className="chillfi-door" aria-label="開心會 chill-fi">
+          <iframe
+            src={`https://yu-and-ai-chillfi.static.hf.space/embed.html?site=${CHILLFI_SITE}`}
+            width="260"
+            height="52"
+            loading="lazy"
+            title={`開心會 chill-fi — ${CHILLFI_SITE}`}
+            referrerPolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          />
+          <small>開心會 chill-fi · this door's own track · 撳 ▶ 先響, never autoplays</small>
+        </aside>
+      </body>
     </html>
   );
 }

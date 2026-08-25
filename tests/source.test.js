@@ -3,6 +3,10 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const PAGE = await readFile(new URL("../app/page.js", import.meta.url), "utf8");
+const LAYOUT = await readFile(
+  new URL("../app/layout.js", import.meta.url),
+  "utf8",
+);
 const MIRROR_UI = await readFile(
   new URL("../app/karma-mirror.js", import.meta.url),
   "utf8",
@@ -82,6 +86,7 @@ test("client sources contain no storage, analytics, or runtime network seam", ()
   ];
 
   for (const [label, source] of [
+    ["layout", LAYOUT],
     ["page", PAGE],
     ["mirror UI", MIRROR_UI],
     ["mirror engine", MIRROR_ENGINE],
@@ -155,6 +160,23 @@ test("KARMA Lantern exposes one inert Truth, Action, and Learning brief", () => 
   );
   assert.match(LANTERN_ENGINE, /supplied Cloudbell card does not match/);
   assert.match(LANTERN_ENGINE, /policy_values_advisory_only/);
+});
+
+test("chill-fi pill hangs once in the shared layout and never autoplays", () => {
+  const pill =
+    /yu-and-ai-chillfi\.static\.hf\.space\/embed\.html\?site=\$\{CHILLFI_SITE\}/g;
+  assert.equal((LAYOUT.match(pill) ?? []).length, 1);
+  assert.match(LAYOUT, /const CHILLFI_SITE = "openweight";/);
+  assert.equal((LAYOUT.match(/<iframe/g) ?? []).length, 1);
+  assert.equal(PAGE.includes("chillfi"), false);
+  const iframe = LAYOUT.match(/<iframe[\s\S]*?\/>/)?.[0] ?? "";
+  assert.equal(/autoplay/i.test(iframe), false);
+  assert.equal(/allow=/.test(iframe), false);
+  assert.equal(/<script/.test(LAYOUT), false);
+  assert.match(iframe, /loading="lazy"/);
+  assert.match(iframe, /referrerPolicy="no-referrer"/);
+  assert.match(iframe, /sandbox="/);
+  assert.match(PRIVACY, /Hugging Face Spaces/);
 });
 
 test("public privacy language names ordinary infrastructure metadata", () => {
